@@ -8,6 +8,6 @@ const router = Router();
 
 router.post('/login', loginAuth );
 router.post('/register', crearAdmin );
-router.put('/passupdate/:id', actualizarAdmin);
+router.put('/update/:id', actualizarAdmin);
 
 export default router;

@@ -21,7 +21,7 @@ class Server {
     constructor() {
         this.path = {
             pages: '/',
-            auth: '/api',
+            auth: '/api/admin',
             admin: '/api/admin/productos'
         };
         this.app = (0, express_1.default)();

@@ -16,8 +16,20 @@ export const crearAdmin = async(req: Request, res: Response) => {
         password
     } = req.body;
 
+    const adminDB = db.getRepository(Admin)
+
     try {
 
+        const existeAdministrador = await adminDB.findOneBy({
+            USUARIO: usuario
+        })
+
+        if (existeAdministrador) {
+            return res.status(409).json({
+                msg : `Ya existe un usuario denominado: ${usuario}` 
+            })
+        }
+        
         const passwordHash = await encrypt(password)
 
         const administrador = Admin.create({

@@ -21,7 +21,16 @@ const obtenerAdmins = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.obtenerAdmins = obtenerAdmins;
 const crearAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { nombre, apellido, usuario, password } = req.body;
+    const adminDB = dbconnection_1.default.getRepository(entities_1.Admin);
     try {
+        const existeAdministrador = yield adminDB.findOneBy({
+            USUARIO: usuario
+        });
+        if (existeAdministrador) {
+            return res.status(409).json({
+                msg: `Ya existe un usuario denominado: ${usuario}`
+            });
+        }
         const passwordHash = yield (0, bcrypt_1.encrypt)(password);
         const administrador = entities_1.Admin.create({
             NOMBRE: nombre.toUpperCase(),

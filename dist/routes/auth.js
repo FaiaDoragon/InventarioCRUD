@@ -6,6 +6,6 @@ const admin_1 = require("../controller/admin");
 const router = (0, express_1.Router)();
 router.post('/login', auth_1.loginAuth);
 router.post('/register', admin_1.crearAdmin);
-router.put('/passupdate/:id', admin_1.actualizarAdmin);
+router.put('/update/:id', admin_1.actualizarAdmin);
 exports.default = router;
 //# sourceMappingURL=auth.js.map

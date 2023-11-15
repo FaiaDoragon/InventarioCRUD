@@ -11,7 +11,7 @@ class Server {
     private port: string;
     private path = {
         pages: '/',
-        auth: '/api',
+        auth: '/api/admin',
         admin: '/api/admin/productos'
 
     }
