@@ -3,55 +3,53 @@ import { encrypt } from '../helpers/bcrypt';
 import db from '../db/dbconnection';
 import { Admin } from '../models/entities';
 
-export const obtenerAdmins = async(req: Request, res: Response) => {
-    
-}
+// export const obtenerAdmins = async(req: Request, res: Response) => {}
 
-export const crearAdmin = async(req: Request, res: Response) => {
+// export const crearAdmin = async(req: Request, res: Response) => {
 
-    const {
-        nombre,
-        apellido,
-        usuario,
-        password
-    } = req.body;
+//     const {
+//         nombre,
+//         apellido,
+//         usuario,
+//         password
+//     } = req.body;
 
-    const adminDB = db.getRepository(Admin)
+//     const adminDB = db.getRepository(Admin)
 
-    try {
+//     try {
 
-        const existeAdministrador = await adminDB.findOneBy({
-            USUARIO: usuario
-        })
+//         const existeAdministrador = await adminDB.findOneBy({
+//             USUARIO: usuario
+//         })
 
-        if (existeAdministrador) {
-            return res.status(409).json({
-                msg : `Ya existe un usuario denominado: ${usuario}` 
-            })
-        }
+//         if (existeAdministrador) {
+//             return res.status(409).json({
+//                 msg : `Ya existe un usuario denominado: ${usuario}` 
+//             })
+//         }
         
-        const passwordHash = await encrypt(password)
+//         const passwordHash = await encrypt(password)
 
-        const administrador = Admin.create({
-            NOMBRE : nombre.toUpperCase(),
-            APELLIDO : apellido.toUpperCase(),
-            USUARIO: usuario,
-            PASSWORD : passwordHash
-        });
+//         const administrador = Admin.create({
+//             NOMBRE : nombre.toUpperCase(),
+//             APELLIDO : apellido.toUpperCase(),
+//             USUARIO: usuario,
+//             PASSWORD : passwordHash
+//         });
 
-        await administrador.save()
+//         await administrador.save()
 
-        res.status(200).json({
-            msg: "Admin Creado",
-            administrador
-        })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            msg: 'Error al Crear Administrador'
-        });
-    }
-}
+//         res.status(200).json({
+//             msg: "Admin Creado",
+//             administrador
+//         })
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({
+//             msg: 'Error al Crear Administrador'
+//         });
+//     }
+// }
 
 export const actualizarAdmin = async (req: Request, res: Response) => {
 

@@ -12,46 +12,47 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.actualizarAdmin = exports.crearAdmin = exports.obtenerAdmins = void 0;
+exports.actualizarAdmin = void 0;
 const bcrypt_1 = require("../helpers/bcrypt");
 const dbconnection_1 = __importDefault(require("../db/dbconnection"));
 const entities_1 = require("../models/entities");
-const obtenerAdmins = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-});
-exports.obtenerAdmins = obtenerAdmins;
-const crearAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nombre, apellido, usuario, password } = req.body;
-    const adminDB = dbconnection_1.default.getRepository(entities_1.Admin);
-    try {
-        const existeAdministrador = yield adminDB.findOneBy({
-            USUARIO: usuario
-        });
-        if (existeAdministrador) {
-            return res.status(409).json({
-                msg: `Ya existe un usuario denominado: ${usuario}`
-            });
-        }
-        const passwordHash = yield (0, bcrypt_1.encrypt)(password);
-        const administrador = entities_1.Admin.create({
-            NOMBRE: nombre.toUpperCase(),
-            APELLIDO: apellido.toUpperCase(),
-            USUARIO: usuario,
-            PASSWORD: passwordHash
-        });
-        yield administrador.save();
-        res.status(200).json({
-            msg: "Admin Creado",
-            administrador
-        });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({
-            msg: 'Error al Crear Administrador'
-        });
-    }
-});
-exports.crearAdmin = crearAdmin;
+// export const obtenerAdmins = async(req: Request, res: Response) => {}
+// export const crearAdmin = async(req: Request, res: Response) => {
+//     const {
+//         nombre,
+//         apellido,
+//         usuario,
+//         password
+//     } = req.body;
+//     const adminDB = db.getRepository(Admin)
+//     try {
+//         const existeAdministrador = await adminDB.findOneBy({
+//             USUARIO: usuario
+//         })
+//         if (existeAdministrador) {
+//             return res.status(409).json({
+//                 msg : `Ya existe un usuario denominado: ${usuario}` 
+//             })
+//         }
+//         const passwordHash = await encrypt(password)
+//         const administrador = Admin.create({
+//             NOMBRE : nombre.toUpperCase(),
+//             APELLIDO : apellido.toUpperCase(),
+//             USUARIO: usuario,
+//             PASSWORD : passwordHash
+//         });
+//         await administrador.save()
+//         res.status(200).json({
+//             msg: "Admin Creado",
+//             administrador
+//         })
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({
+//             msg: 'Error al Crear Administrador'
+//         });
+//     }
+// }
 const actualizarAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const adminDB = dbconnection_1.default.getRepository(entities_1.Admin);
     const { body } = req;

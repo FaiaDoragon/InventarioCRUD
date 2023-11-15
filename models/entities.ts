@@ -52,6 +52,9 @@ export class Admin extends BaseEntity{
     @Column({ type: "varchar", length: 255 })
     APELLIDO: string = '';
 
+    @Column({ type: "int" })
+    EDAD: number = 0;
+
     @Column({ type: 'varchar', length: 255 })
     USUARIO: string = '';
 

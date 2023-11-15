@@ -16,6 +16,7 @@ exports.loginPage = exports.loginAuth = void 0;
 const bcrypt_1 = require("../helpers/bcrypt");
 const dbconnection_1 = __importDefault(require("../db/dbconnection"));
 const entities_1 = require("../models/entities");
+const jwt_generator_1 = require("../helpers/jwt-generator");
 const loginAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { USUARIO, PASSWORD } = req.body;
     const adminDB = dbconnection_1.default.getRepository(entities_1.Admin);
@@ -34,11 +35,17 @@ const loginAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 msg: `Usuario o Contraseña invalidos`
             });
         }
+        const tokenSesion = yield (0, jwt_generator_1.generarJWT)(administrador);
         res.status(200).json({
-            administrador
+            administrador,
+            tokenSesion
         });
     }
     catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'hubo un error comuniquese con el administrador'
+        });
     }
     //res.status(200).sendFile(path.join(__dirname, '../../', 'public', 'controlpanel.html'))
 });

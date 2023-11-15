@@ -82,6 +82,7 @@ let Admin = class Admin extends typeorm_1.BaseEntity {
         this.ESTADO = true;
         this.NOMBRE = '';
         this.APELLIDO = '';
+        this.EDAD = 0;
         this.USUARIO = '';
         this.PASSWORD = '';
     }
@@ -103,6 +104,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: "varchar", length: 255 }),
     __metadata("design:type", String)
 ], Admin.prototype, "APELLIDO", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "int" }),
+    __metadata("design:type", Number)
+], Admin.prototype, "EDAD", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
     __metadata("design:type", String)

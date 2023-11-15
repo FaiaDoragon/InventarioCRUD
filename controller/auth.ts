@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import path from 'path';
 import { compare } from '../helpers/bcrypt';
 import db from '../db/dbconnection';
 import { Admin } from '../models/entities';
+import { generarJWT } from '../helpers/jwt-generator';
 
 
 export const loginAuth = async(req: Request, res: Response) => {
@@ -31,11 +31,17 @@ export const loginAuth = async(req: Request, res: Response) => {
             })
         }
 
+        const tokenSesion = await generarJWT(administrador)
+
         res.status(200).json({
-        administrador
+        administrador,
+        tokenSesion
         })
     } catch (error) {
-        
+        console.log(error);
+        return res.status(500).json({
+            msg : 'hubo un error comuniquese con el administrador'
+        })
     }
 
     

@@ -7,16 +7,17 @@ import { crearProducto,
     actualizarProducto, 
     borrarProducto, 
     eliminarProducto } from "../controller/productos";
+import { validarJWT } from "../middlewares/validarjwt";
 
 
 
 const router = Router();
 
-router.get('/', obtenerProductos )
-router.post('/', crearProducto )
-router.get('/:id', obtenerProducto )
-router.put('/:id', actualizarProducto )
-router.delete('/:id', borrarProducto )
-router.delete('/d/:id', eliminarProducto )
+router.get('/', validarJWT, obtenerProductos )
+router.post('/', validarJWT, crearProducto )
+router.get('/:id', validarJWT, obtenerProducto )
+router.put('/:id', validarJWT, actualizarProducto )
+router.delete('/:id', validarJWT, borrarProducto )
+router.delete('/d/:id', validarJWT, eliminarProducto )
 
 export default router;
