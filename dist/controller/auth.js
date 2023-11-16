@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginPage = exports.loginAuth = void 0;
+exports.renovarToken = exports.loginAuth = void 0;
 const bcrypt_1 = require("../helpers/bcrypt");
 const dbconnection_1 = __importDefault(require("../db/dbconnection"));
 const entities_1 = require("../models/entities");
@@ -31,14 +31,13 @@ const loginAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const checkPassword = yield (0, bcrypt_1.compare)(PASSWORD, administrador.PASSWORD);
         if (!checkPassword) {
-            res.status(409).json({
+            return res.status(409).json({
                 msg: `Usuario o Contraseña invalidos`
             });
         }
-        const tokenSesion = yield (0, jwt_generator_1.generarJWT)(administrador);
+        const token = yield (0, jwt_generator_1.generarJWT)(administrador);
         res.status(200).json({
-            administrador,
-            tokenSesion
+            token
         });
     }
     catch (error) {
@@ -47,10 +46,20 @@ const loginAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             msg: 'hubo un error comuniquese con el administrador'
         });
     }
-    //res.status(200).sendFile(path.join(__dirname, '../../', 'public', 'controlpanel.html'))
 });
 exports.loginAuth = loginAuth;
-const loginPage = () => {
-};
-exports.loginPage = loginPage;
+const renovarToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { USUARIO } = req.body;
+    const adminDB = dbconnection_1.default.getRepository(entities_1.Admin);
+    const administrador = yield adminDB.findOneBy({
+        USUARIO
+    });
+    //generar JWT
+    const token = yield (0, jwt_generator_1.generarJWT)(administrador);
+    res.json({
+        administrador,
+        token
+    });
+});
+exports.renovarToken = renovarToken;
 //# sourceMappingURL=auth.js.map

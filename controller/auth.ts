@@ -8,7 +8,6 @@ import { generarJWT } from '../helpers/jwt-generator';
 export const loginAuth = async(req: Request, res: Response) => {
 
     const { USUARIO, PASSWORD } = req.body
-
     const adminDB = db.getRepository(Admin)
 
     try {
@@ -26,16 +25,15 @@ export const loginAuth = async(req: Request, res: Response) => {
         const checkPassword = await compare(PASSWORD, administrador.PASSWORD)
 
         if (!checkPassword) {
-            res.status(409).json({
+            return res.status(409).json({
                 msg : `Usuario o Contraseña invalidos`
             })
         }
 
-        const tokenSesion = await generarJWT(administrador)
+        const token = await generarJWT(administrador)
 
         res.status(200).json({
-        administrador,
-        tokenSesion
+        token
         })
     } catch (error) {
         console.log(error);
@@ -43,14 +41,21 @@ export const loginAuth = async(req: Request, res: Response) => {
             msg : 'hubo un error comuniquese con el administrador'
         })
     }
-
-    
-    //res.status(200).sendFile(path.join(__dirname, '../../', 'public', 'controlpanel.html'))
-
 }
 
-export const loginPage = () => {
+export const renovarToken = async( req : Request, res : Response ) => {
 
+    const { USUARIO } = req.body;
+    const adminDB = db.getRepository(Admin)
+
+    const administrador = await adminDB.findOneBy({
+        USUARIO
+    })
+    //generar JWT
+    const token = await generarJWT( administrador )
+
+    res.json({
+        administrador,
+        token
+    })
 }
-
-

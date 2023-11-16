@@ -3,22 +3,28 @@ import cors from "cors"
 import db from "../db/dbconnection";
 import productos from "../routes/productos";
 import auth from "../routes/auth";
+import pages from "../routes/pages";
+import hbs from 'hbs';
+import path from "path";
+import fs from 'fs'
 
-
+const bannerPartialContent = fs.readFileSync(path.join(__dirname, '../../views/partials/banner.hbs'), 'utf8');
 
 class Server {
     private app : Application;
     private port: string;
+    private hbs;
     private path = {
         pages: '/',
         auth: '/api/admin',
-        admin: '/api/admin/productos'
+        productos: '/api/admin/productos'
 
     }
 
     constructor() {
         this.app = express()
         this.port = process.env.PORT || '3000';
+        this.hbs = hbs
 
         this.middleware()
 
@@ -44,8 +50,13 @@ class Server {
     }
 
     routes() {
+        
+        this.app.set('view engine', 'hbs');
+        this.hbs.registerPartial('banner', bannerPartialContent);
+        this.app.use(this.path.pages, pages)
+        
         this.app.use(this.path.auth, auth)
-        this.app.use(this.path.admin, productos)
+        this.app.use(this.path.productos, productos)
     }
 
     listen() {

@@ -17,15 +17,21 @@ const cors_1 = __importDefault(require("cors"));
 const dbconnection_1 = __importDefault(require("../db/dbconnection"));
 const productos_1 = __importDefault(require("../routes/productos"));
 const auth_1 = __importDefault(require("../routes/auth"));
+const pages_1 = __importDefault(require("../routes/pages"));
+const hbs_1 = __importDefault(require("hbs"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const bannerPartialContent = fs_1.default.readFileSync(path_1.default.join(__dirname, '../../views/partials/banner.hbs'), 'utf8');
 class Server {
     constructor() {
         this.path = {
             pages: '/',
             auth: '/api/admin',
-            admin: '/api/admin/productos'
+            productos: '/api/admin/productos'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '3000';
+        this.hbs = hbs_1.default;
         this.middleware();
         this.db();
         this.routes();
@@ -47,8 +53,11 @@ class Server {
         });
     }
     routes() {
+        this.app.set('view engine', 'hbs');
+        this.hbs.registerPartial('banner', bannerPartialContent);
+        this.app.use(this.path.pages, pages_1.default);
         this.app.use(this.path.auth, auth_1.default);
-        this.app.use(this.path.admin, productos_1.default);
+        this.app.use(this.path.productos, productos_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

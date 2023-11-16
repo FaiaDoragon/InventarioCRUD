@@ -6,8 +6,11 @@ export const obtenerProductos = async (req: Request, res: Response) => {
 
     const productos = await Producto.find()
 
-    res.json({
-        msg: "Lista completa de productos",
+    if (!productos) {
+        return res.status(404).json({msg: "Lista completa de productos"})
+    }
+    res.status(200).json({
+        // msg: "Lista completa de productos",
         productos
     })
 }
@@ -61,17 +64,17 @@ export const obtenerProducto = async (req: Request, res: Response) => {
         })
     }
 
-    const productoId = await Producto.findOneBy({
+    const producto = await Producto.findOneBy({
         ID: id
     });
 
-    if (!productoId) {
+    if (!producto) {
         return res.status(404).json({ msg: `No se encontro producto con el id:` })
     }
 
     res.status(200).json({
         msg: "producto encontrado",
-        productoId
+        producto
     })
 }
 

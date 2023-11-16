@@ -7,7 +7,7 @@ import express from 'express';
 
 export const validarJWT = async (req: Request, res: Response, next: express.NextFunction) => {
 
-    const token = req.header('x-token')
+    const token = req.header('x-token');
 
     if (!token) {
         return res.status(401).json({
@@ -16,7 +16,7 @@ export const validarJWT = async (req: Request, res: Response, next: express.Next
     }
 
     try {
-        const payload = jwt.verify(token || '', process.env.KEY_TOKEN || "")
+        const payload : any = jwt.verify(token || '', process.env.KEY_TOKEN || "")
 
         const adminDB = db.getRepository(Admin)
 

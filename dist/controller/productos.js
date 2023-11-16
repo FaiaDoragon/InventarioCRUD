@@ -17,8 +17,11 @@ const entities_1 = require("../models/entities");
 const dbconnection_1 = __importDefault(require("../db/dbconnection"));
 const obtenerProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const productos = yield entities_1.Producto.find();
-    res.json({
-        msg: "Lista completa de productos",
+    if (!productos) {
+        return res.status(404).json({ msg: "Lista completa de productos" });
+    }
+    res.status(200).json({
+        // msg: "Lista completa de productos",
         productos
     });
 });
@@ -57,15 +60,15 @@ const obtenerProducto = (req, res) => __awaiter(void 0, void 0, void 0, function
             msg: `Debe enviar un id Valido`
         });
     }
-    const productoId = yield entities_1.Producto.findOneBy({
+    const producto = yield entities_1.Producto.findOneBy({
         ID: id
     });
-    if (!productoId) {
+    if (!producto) {
         return res.status(404).json({ msg: `No se encontro producto con el id:` });
     }
     res.status(200).json({
         msg: "producto encontrado",
-        productoId
+        producto
     });
 });
 exports.obtenerProducto = obtenerProducto;
