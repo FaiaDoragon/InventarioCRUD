@@ -18,7 +18,7 @@ export class Producto extends BaseEntity {
     @Column({ type: 'varchar', length: 255 })
     IMG: string = '';
 
-    @Column({ type: 'decimal', precision: 10, scale: 0 })
+    @Column({ type: 'float'})
     PRECIO: number = 0;
 
     @Column({ type: 'int' })

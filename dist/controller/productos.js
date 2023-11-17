@@ -64,7 +64,7 @@ const obtenerProducto = (req, res) => __awaiter(void 0, void 0, void 0, function
         ID: id
     });
     if (!producto) {
-        return res.status(404).json({ msg: `No se encontro producto con el id:` });
+        return res.status(404).json({ msg: `No se encontro producto con el id: ${id}` });
     }
     res.status(200).json({
         msg: "producto encontrado",
@@ -118,7 +118,7 @@ const borrarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
             ID: id
         });
         if (!producto) {
-            return res.status(404).json({ msg: "No se encontro producto con el id suministrado" });
+            return res.status(404).json({ msg: `No se encontro producto con el id: ${id}` });
         }
         if (!producto.ESTADO) {
             productoDB.merge(producto, { ESTADO: true });

@@ -49,7 +49,7 @@ __decorate([
     __metadata("design:type", String)
 ], Producto.prototype, "IMG", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 0 }),
+    (0, typeorm_1.Column)({ type: 'float' }),
     __metadata("design:type", Number)
 ], Producto.prototype, "PRECIO", void 0);
 __decorate([

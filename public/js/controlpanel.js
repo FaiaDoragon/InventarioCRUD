@@ -1,12 +1,11 @@
 const buttonListar = document.getElementById('listar');
 const buttonFormCrear = document.getElementById('crear');
 const buttonEditar = document.getElementById('editar');
-const buttonFormBorrar = document.getElementById('borrar');
+const buttonBorrar = document.getElementById('borrar');
 
 const url = `http://localhost:3000/api/admin/productos/`
 
 buttonListar.addEventListener('click', ev => {
-    ev.preventDefault();
     const token = localStorage.getItem('x-token');
     if (!token) {
         window.location.href = 'http://localhost:3000'
@@ -64,9 +63,8 @@ buttonListar.addEventListener('click', ev => {
         })
 })
 
-buttonFormCrear.addEventListener('click', ev => {
-    ev.preventDefault();
-
+buttonFormCrear.addEventListener('click', (ev) => {
+    ev.preventDefault()
     const token = localStorage.getItem('x-token');
 
     if (!token) {
@@ -74,39 +72,98 @@ buttonFormCrear.addEventListener('click', ev => {
         throw new Error('No hay token valido en el servidor')
     }
 
-    const formularioCrear = document.createElement('table');
+    const formularioCrear = document.createElement('div');
     formularioCrear.innerHTML = `
-            <form action="">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-
-        <label for="marca">Marca:</label>
-        <input type="text" id="marca" name="marca" required>
-
-        <label for="img">Imagen:</label>
-        <input type="url" id="img" name="img" >
-
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" name="precio" >
-
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" >
-
-        <label for="talla">Talla:</label>
-        <input type="text" id="talla" name="talla" >
-
-
-        <label for="color">Color:</label>
-        <input type="text" id="color" name="color" required>
-
-        <button type="submit">Enviar</button>
-    </form>
+            <form action="" id="miFormulario">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required />
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" name="marca" required />
+                <label for="img">Imagen:</label>
+                <input type="text" id="img" name="img" />
+                <label for="precio">Precio:</label>
+                <input type="decimal" id="precio" name="precio" />
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="stock" />
+                <label for="talla">Talla:</label>
+                <input type="text" id="talla" name="talla" />
+                <label for="color">Color:</label>
+                <input type="text" id="color" name="color" required />
+                <button type="submit" id="enviardata">Enviar</button>
+            </form>
             `
     document.body.appendChild(formularioCrear);
+
+    //TODO: HACER QUE LA PAGINA NO SE RECARGUE AL DAR ENVIAR EN EL FORMULARIO
+    const enviarCrear = document.getElementById("enviardata");
+    enviarCrear.addEventListener('submit', (ev) => {
+        ev.preventDefault()
+
+        const token = localStorage.getItem('x-token');
+
+        const formulario = document.getElementById("miFormulario");
+        const datos = new FormData(formulario);
+
+        console.log(datos);
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'x-token': token },
+            body: JSON.stringify(datos)
+        })
+            .then(resp => resp.json())
+            .then(({ msg, producto }) => {
+                if (msg) {
+                    console.log(msg);
+                }
+                const productoCreado = document.createElement('table');
+                productoCreado.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>ESTADO</th>
+                        <th>MARCA</th>
+                        <th>PRECIO</th>
+                        <th>STOCK</th>
+                        <th>TALLA</th>
+                        <th>COLOR</th>
+                        <th>CREATED_AT</th>
+                        <th>UPDATED_AT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${producto.ID}</td>
+                        <td>${producto.NOMBRE}</td>
+                        <td>${producto.ESTADO}</td>
+                        <td>${producto.MARCA}</td>
+                        <td>${producto.PRECIO}</td>
+                        <td>${producto.STOCK}</td>
+                        <td>${producto.TALLA}</td>
+                        <td>${producto.COLOR}</td>
+                        <td>${producto.createdAt}</td>
+                        <td>${producto.updatedAt}</td>
+                    </tr>
+                </tbody>
+            `;
+                document.body.appendChild(productoCreado);
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
 })
 
 buttonEditar.addEventListener('click', ev => {
-    ev.preventDefault()
+    const token = localStorage.getItem('x-token');
+
+
+    if (!token) {
+        window.location.href = 'http://localhost:3000'
+        throw new Error('No hay token valido en el servidor')
+    }
 
     const barraBusqueda = document.createElement('div')
     barraBusqueda.innerHTML = `
@@ -123,11 +180,6 @@ buttonEditar.addEventListener('click', ev => {
 
         const token = localStorage.getItem('x-token');
 
-        if (!token) {
-            window.location.href = 'http://localhost:3000'
-            throw new Error('No hay token valido en el servidor')
-        }
-
         fetch(url + id, {
             headers: {
                 'x-token': token
@@ -136,7 +188,10 @@ buttonEditar.addEventListener('click', ev => {
             .then(resp => resp.json())
             .then(({ msg, producto }) => {
                 if (msg) {
-                    console.log(msg);
+                    const mensaje = document.createElement('div');
+                    mensaje.innerHTML = `<h3>${msg}</h3>`
+
+                    document.body.appendChild(mensaje)
                 }
                 const formularioCrear = document.createElement('table');
                 formularioCrear.innerHTML = `
@@ -176,9 +231,7 @@ buttonEditar.addEventListener('click', ev => {
 
 })
 
-buttonFormBorrar.addEventListener('click', ev => {
-    ev.preventDefault();
-
+buttonBorrar.addEventListener('click', ev => {
     const token = localStorage.getItem('x-token');
 
     if (!token) {
@@ -186,58 +239,70 @@ buttonFormBorrar.addEventListener('click', ev => {
         throw new Error('No hay token valido en el servidor')
     }
 
-    fetch(url + '2', {
-        method: 'DELETE',
-        headers: {
-            'x-token': token
-        }
-    })
-        .then(resp => resp.json())
-        .then(({ msg, producto }) => {
-            if (msg) {
-                const avisoDelete = document.createElement('div');
-                avisoDelete.innerHTML = `<h2>${msg}</h2>`
-                document.body.appendChild(avisoDelete);
+    const barraBusqueda = document.createElement('div')
+    barraBusqueda.innerHTML = `
+    <input type="text" id="productoID" placeholder='introdusca ID' /><button id="searchborrar">buscar</button>
+    `
+    document.body.appendChild(barraBusqueda)
+
+    const buttonFormBorrar = document.getElementById('searchborrar');
+
+    buttonFormBorrar.addEventListener('click', (ev) => {
+        ev.preventDefault()
+
+        const id = document.getElementById('productoID').value;
+
+        const token = localStorage.getItem('x-token')
+
+        fetch(url + id, {
+            method: 'DELETE',
+            headers: {
+                'x-token': token
             }
-            const productoBorrar = document.createElement('div');
-            productoBorrar.innerHTML = `
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>ESTADO</th>
-                    <th>MARCA</th>
-                    <th>PRECIO</th>
-                    <th>STOCK</th>
-                    <th>TALLA</th>
-                    <th>COLOR</th>
-                    <th>CREATED_AT</th>
-                    <th>UPDATED_AT</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>${producto.ID}</td>
-                    <td>${producto.NOMBRE}</td>
-                    <td>${producto.ESTADO}</td>
-                    <td>${producto.MARCA}</td>
-                    <td>${producto.PRECIO}</td>
-                    <td>${producto.STOCK}</td>
-                    <td>${producto.TALLA}</td>
-                    <td>${producto.COLOR}</td>
-                    <td>${producto.createdAt}</td>
-                    <td>${producto.updatedAt}</td>
-                </tr>
-            </tbody>
-        `;
-            document.body.appendChild(productoBorrar);
+        })
+            .then(resp => resp.json())
+            .then(({ msg, producto }) => {
+                if (msg) {
+                    const avisoDelete = document.createElement('div');
+                    avisoDelete.innerHTML = `<h2>${msg}</h2>`
+                    document.body.appendChild(avisoDelete);
+                }
+                const productoBorrar = document.createElement('table');
+                productoBorrar.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>ESTADO</th>
+                        <th>MARCA</th>
+                        <th>PRECIO</th>
+                        <th>STOCK</th>
+                        <th>TALLA</th>
+                        <th>COLOR</th>
+                        <th>CREATED_AT</th>
+                        <th>UPDATED_AT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${producto.ID}</td>
+                        <td>${producto.NOMBRE}</td>
+                        <td>${producto.ESTADO}</td>
+                        <td>${producto.MARCA}</td>
+                        <td>${producto.PRECIO}</td>
+                        <td>${producto.STOCK}</td>
+                        <td>${producto.TALLA}</td>
+                        <td>${producto.COLOR}</td>
+                        <td>${producto.createdAt}</td>
+                        <td>${producto.updatedAt}</td>
+                    </tr>
+                </tbody>
+            `;
+                document.body.appendChild(productoBorrar);
 
-        })
-        .catch(err => {
-            console.log(err)
-        })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
 })
-
-
-
-

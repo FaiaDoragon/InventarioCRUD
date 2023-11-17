@@ -69,7 +69,7 @@ export const obtenerProducto = async (req: Request, res: Response) => {
     });
 
     if (!producto) {
-        return res.status(404).json({ msg: `No se encontro producto con el id:` })
+        return res.status(404).json({ msg: `No se encontro producto con el id: ${id}` })
     }
 
     res.status(200).json({
@@ -141,7 +141,7 @@ export const borrarProducto = async (req: Request, res: Response) => {
         })
 
         if (!producto) {
-            return res.status(404).json({ msg: "No se encontro producto con el id suministrado" })
+            return res.status(404).json({ msg: `No se encontro producto con el id: ${id}` })
         }
 
         if (!producto.ESTADO) {

@@ -22,7 +22,11 @@ formulario.addEventListener('submit', async (ev) => {
         .then(resp => resp.json())
         .then(({ msg, token }) => {
             if (msg) {
-                return console.log(msg);
+
+                const noAuth = document.getElementById('error')
+                noAuth.innerHTML = `${msg}`
+
+                return document.body.appendChild(noAuth)
             }
             localStorage.setItem('x-token', token);
             window.location.href = 'http://localhost:3000/panelcontrol';

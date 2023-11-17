@@ -13,8 +13,10 @@ label {
 }
 
 input, select {
-    width: 100%;
+    width: 25%;
     padding: 8px;
+    margin-top: 5px;
+    margin-right: 5px;
     margin-bottom: 16px;
     box-sizing: border-box;
 }
