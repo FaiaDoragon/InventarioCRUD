@@ -16,7 +16,7 @@ export const obtenerProductos = async (req: Request, res: Response) => {
 }
 
 export const crearProducto = async (req: Request, res: Response) => {
-
+    
     const {
         nombre,
         marca,
@@ -46,8 +46,8 @@ export const crearProducto = async (req: Request, res: Response) => {
         });
     } catch (error: any) {
         return res.status(500).json({
-            error: 'Error al crear el producto',
-            msg: error.message
+            error: "Error al crear producto",
+            msg: error.message,
         });
     }
 }

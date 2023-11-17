@@ -74,7 +74,7 @@ buttonFormCrear.addEventListener('click', (ev) => {
 
     const formularioCrear = document.createElement('div');
     formularioCrear.innerHTML = `
-            <form action="" id="miFormulario">
+            <form id="miFormulario">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required />
                 <label for="marca">Marca:</label>
@@ -82,7 +82,7 @@ buttonFormCrear.addEventListener('click', (ev) => {
                 <label for="img">Imagen:</label>
                 <input type="text" id="img" name="img" />
                 <label for="precio">Precio:</label>
-                <input type="decimal" id="precio" name="precio" />
+                <input type="number" id="precio" name="precio" step="0.01"/>
                 <label for="stock">Stock:</label>
                 <input type="number" id="stock" name="stock" />
                 <label for="talla">Talla:</label>
@@ -94,21 +94,22 @@ buttonFormCrear.addEventListener('click', (ev) => {
             `
     document.body.appendChild(formularioCrear);
 
-    //TODO: HACER QUE LA PAGINA NO SE RECARGUE AL DAR ENVIAR EN EL FORMULARIO
-    const enviarCrear = document.getElementById("enviardata");
+    const enviarCrear = document.getElementById("miFormulario");
+
     enviarCrear.addEventListener('submit', (ev) => {
         ev.preventDefault()
 
         const token = localStorage.getItem('x-token');
-
-        const formulario = document.getElementById("miFormulario");
-        const datos = new FormData(formulario);
-
-        console.log(datos);
+        const datos = Object.fromEntries(
+            new FormData(ev.target)
+        )
 
         fetch(url, {
             method: 'POST',
-            headers: { 'x-token': token },
+            headers: {
+                'x-token': token,
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(datos)
         })
             .then(resp => resp.json())
@@ -154,6 +155,7 @@ buttonFormCrear.addEventListener('click', (ev) => {
                 console.log(err)
             })
     })
+
 })
 
 buttonEditar.addEventListener('click', ev => {
