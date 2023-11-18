@@ -185,7 +185,7 @@ buttonEditar.addEventListener('click', ev => {
 
         fetch(url + id, {
             headers: {
-                'x-token': token
+                'x-token': token,
             }
         })
             .then(resp => resp.json())
@@ -196,42 +196,97 @@ buttonEditar.addEventListener('click', ev => {
 
                     document.body.appendChild(mensaje)
                 }
-                const formularioCrear = document.createElement('table');
-                formularioCrear.innerHTML = `
-        <form action="" id="miFormularioEditar">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" placeholder='${producto.NOMBRE}' >
-
-        <label for="marca">Marca:</label>
-        <input type="text" id="marca" name="marca" placeholder='${producto.MARCA}' >
-
-        <label for="img">Imagen:</label>
-        <input type="url" id="img" name="img" placeholder='${producto.IMG}' >
-
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" name="precio" placeholder='${producto.PRECIO}' >
-
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" placeholder='${producto.STOCK}' >
-
-        <label for="talla">Talla:</label>
-        <input type="text" id="talla" name="talla" placeholder='${producto.TALLA}' >
-
-
-        <label for="color">Color:</label>
-        <input type="text" id="color" name="color" placeholder='${producto.COLOR}' >
-
-        <button type="submit">Enviar</button>
-        </form>
+                const formularioEditar = document.createElement('div');
+                formularioEditar.innerHTML = `
+                <form action="" id="miFormularioEditar">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="NOMBRE" placeholder='${producto.NOMBRE}' >     
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" name="MARCA" placeholder='${producto.MARCA}' >                   
+                <label for="img">Imagen:</label>
+                <input type="text" id="img" name="IMG" placeholder='${producto.IMG}' >                  
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" name="PRECIO" placeholder='${producto.PRECIO}' step="0.01">                  
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="STOCK" placeholder='${producto.STOCK}' >                
+                <label for="talla">Talla:</label>
+                <input type="text" id="talla" name="TALLA" placeholder='${producto.TALLA}' >                            
+                <label for="color">Color:</label>
+                <input type="text" id="color" name="COLOR" placeholder='${producto.COLOR}' >                
+                <button type="submit" id="superbutton">Enviar</button>
+                </form>
             `
-                document.body.appendChild(formularioCrear);
+                document.body.appendChild(formularioEditar);
 
-                const miFormularioEditar = document.getElementById('miFormularioEditar');
+                const miFormularioEditar = document.getElementById('miFormularioEditar')
                 miFormularioEditar.addEventListener('submit', (ev) => {
-                    ev.preventDefault()
-                    
-                })
+                    ev.preventDefault();
 
+                    const datos = Object.fromEntries(
+                        new FormData(ev.target)
+                    )
+
+                    datos.COLOR = datos.COLOR !== '' ? datos.COLOR : undefined;
+                    datos.IMG = datos.IMG !== '' ? datos.IMG : undefined;
+                    datos.MARCA = datos.MARCA !== '' ? datos.MARCA : undefined;
+                    datos.TALLA = datos.TALLA !== '' ? datos.TALLA : undefined;
+                    datos.NOMBRE = datos.NOMBRE !== '' ? datos.NOMBRE : undefined;
+                    datos.PRECIO = datos.PRECIO !== '' ? parseFloat(datos.PRECIO) : undefined;
+                    datos.STOCK = datos.STOCK !== '' ? parseInt(datos.STOCK) : undefined;
+
+                    console.log(datos);
+
+                    fetch(url + id, {
+                        method: 'PUT',
+                        headers: {
+                            'x-token': token,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datos)
+                    })
+                        .then(resp => resp.json())
+                        .then(({ msg, producto }) => {
+                            if (msg) {
+                                const avisoUpdated = document.createElement('div');
+                                avisoUpdated.innerHTML = `<h2>${msg}</h2>`
+                                document.body.appendChild(avisoUpdated);
+                            }
+
+                            const productoEditado = document.createElement('table')
+                            productoEditado.innerHTML = `
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>ESTADO</th>
+                                <th>MARCA</th>
+                                <th>PRECIO</th>
+                                <th>STOCK</th>
+                                <th>TALLA</th>
+                                <th>COLOR</th>
+                                <th>CREATED_AT</th>
+                                <th>UPDATED_AT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    <td>${producto.ID}</td>
+                                    <td>${producto.NOMBRE}</td>
+                                    <td>${producto.ESTADO}</td>
+                                    <td>${producto.MARCA}</td>
+                                    <td>${producto.PRECIO}</td>
+                                    <td>${producto.STOCK}</td>
+                                    <td>${producto.TALLA}</td>
+                                    <td>${producto.COLOR}</td>
+                                    <td>${producto.createdAt}</td>
+                                    <td>${producto.updatedAt}</td>
+                                </tr>
+                        </tbody>
+                            `
+                            document.body.appendChild(productoEditado)
+                            
+                        })
+                })
             })
             .catch(err => {
                 console.log(err)

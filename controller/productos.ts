@@ -81,7 +81,7 @@ export const obtenerProducto = async (req: Request, res: Response) => {
 export const actualizarProducto = async (req: Request, res: Response) => {
 
     const idString = req.params.id
-    const { body } = req
+    const { body } = req;
 
     const id = parseInt(idString)
 
