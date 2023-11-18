@@ -2,6 +2,7 @@ const buttonListar = document.getElementById('listar');
 const buttonFormCrear = document.getElementById('crear');
 const buttonEditar = document.getElementById('editar');
 const buttonBorrar = document.getElementById('borrar');
+const buttonEliminar = document.getElementById('eliminar');
 
 const url = `http://localhost:3000/api/admin/productos/`
 
@@ -197,12 +198,12 @@ buttonEditar.addEventListener('click', ev => {
                 }
                 const formularioCrear = document.createElement('table');
                 formularioCrear.innerHTML = `
-        <form action="">
+        <form action="" id="miFormularioEditar">
         <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" placeholder='${producto.NOMBRE}' required>
+        <input type="text" id="nombre" name="nombre" placeholder='${producto.NOMBRE}' >
 
         <label for="marca">Marca:</label>
-        <input type="text" id="marca" name="marca" placeholder='${producto.MARCA}' required>
+        <input type="text" id="marca" name="marca" placeholder='${producto.MARCA}' >
 
         <label for="img">Imagen:</label>
         <input type="url" id="img" name="img" placeholder='${producto.IMG}' >
@@ -218,12 +219,18 @@ buttonEditar.addEventListener('click', ev => {
 
 
         <label for="color">Color:</label>
-        <input type="text" id="color" name="color" placeholder='${producto.COLOR}' required>
+        <input type="text" id="color" name="color" placeholder='${producto.COLOR}' >
 
         <button type="submit">Enviar</button>
         </form>
             `
                 document.body.appendChild(formularioCrear);
+
+                const miFormularioEditar = document.getElementById('miFormularioEditar');
+                miFormularioEditar.addEventListener('submit', (ev) => {
+                    ev.preventDefault()
+                    
+                })
 
             })
             .catch(err => {
@@ -302,6 +309,49 @@ buttonBorrar.addEventListener('click', ev => {
             `;
                 document.body.appendChild(productoBorrar);
 
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+})
+
+buttonEliminar.addEventListener('click', ev => {
+    const token = localStorage.getItem('x-token');
+
+    if (!token) {
+        window.location.href = 'http://localhost:3000'
+        throw new Error('No hay token valido en el servidor')
+    }
+
+    const barraBusqueda = document.createElement('div')
+    barraBusqueda.innerHTML = `
+    <input type="text" id="productoID" placeholder='introdusca ID' /><button id="searcheliminar">buscar</button>
+    `
+    document.body.appendChild(barraBusqueda)
+
+    const buttonFormEliminar = document.getElementById('searcheliminar');
+
+    buttonFormEliminar.addEventListener('click', (ev) => {
+        ev.preventDefault()
+
+        const id = document.getElementById('productoID').value;
+
+        const token = localStorage.getItem('x-token')
+
+        fetch(url + '/d/' + id, {
+            method: 'DELETE',
+            headers: {
+                'x-token': token
+            }
+        })
+            .then(resp => resp.json())
+            .then(({ msg }) => {
+                if (msg) {
+                    const avisoDelete = document.createElement('div');
+                    avisoDelete.innerHTML = `<h2>${msg}</h2>`
+                    document.body.appendChild(avisoDelete);
+                }
             })
             .catch(err => {
                 console.log(err)
