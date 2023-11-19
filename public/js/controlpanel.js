@@ -226,15 +226,11 @@ buttonEditar.addEventListener('click', ev => {
                         new FormData(ev.target)
                     )
 
-                    datos.COLOR = datos.COLOR !== '' ? datos.COLOR : undefined;
-                    datos.IMG = datos.IMG !== '' ? datos.IMG : undefined;
-                    datos.MARCA = datos.MARCA !== '' ? datos.MARCA : undefined;
-                    datos.TALLA = datos.TALLA !== '' ? datos.TALLA : undefined;
-                    datos.NOMBRE = datos.NOMBRE !== '' ? datos.NOMBRE : undefined;
-                    datos.PRECIO = datos.PRECIO !== '' ? parseFloat(datos.PRECIO) : undefined;
-                    datos.STOCK = datos.STOCK !== '' ? parseInt(datos.STOCK) : undefined;
-
-                    console.log(datos);
+                    for ( let key in datos) {
+                        if (datos[key] === '') {
+                            datos[key] = undefined;
+                        }
+                    }
 
                     fetch(url + id, {
                         method: 'PUT',
