@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { controlPage, loginPage } from "../controller/pages";
-import { validarJWT } from "../middlewares/validarjwt";
+import { controlPage, loginPage } from "../../controller/pages";
 
 const router = Router();
 

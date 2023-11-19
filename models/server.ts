@@ -1,12 +1,13 @@
 import express, { Application } from "express";
 import cors from "cors"
 import db from "../db/dbconnection";
-import productos from "../routes/productos";
-import auth from "../routes/auth";
-import pages from "../routes/pages";
+import productos from "../v1/routes/productos";
+import auth from "../v1/routes/auth";
+import pages from "../v1/routes/pages";
 import hbs from 'hbs';
 import path from "path";
 import fs from 'fs'
+import { swaggerDocs } from "../v1/swagger";
 
 const bannerPartialContent = fs.readFileSync(path.join(__dirname, '../../views/partials/banner.hbs'), 'utf8');
 
@@ -62,7 +63,7 @@ class Server {
     listen() {
         this.app.listen(this.port, () => {
             console.log(`Servidor corriendo en el puerto ${this.port}`);
-            
+            swaggerDocs(this.app, this.port)
         })
     }
 }

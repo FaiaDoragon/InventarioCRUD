@@ -15,12 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dbconnection_1 = __importDefault(require("../db/dbconnection"));
-const productos_1 = __importDefault(require("../routes/productos"));
-const auth_1 = __importDefault(require("../routes/auth"));
-const pages_1 = __importDefault(require("../routes/pages"));
+const productos_1 = __importDefault(require("../v1/routes/productos"));
+const auth_1 = __importDefault(require("../v1/routes/auth"));
+const pages_1 = __importDefault(require("../v1/routes/pages"));
 const hbs_1 = __importDefault(require("hbs"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+const swagger_1 = require("../v1/swagger");
 const bannerPartialContent = fs_1.default.readFileSync(path_1.default.join(__dirname, '../../views/partials/banner.hbs'), 'utf8');
 class Server {
     constructor() {
@@ -62,6 +63,7 @@ class Server {
     listen() {
         this.app.listen(this.port, () => {
             console.log(`Servidor corriendo en el puerto ${this.port}`);
+            (0, swagger_1.swaggerDocs)(this.app, this.port);
         });
     }
 }

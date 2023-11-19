@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { loginAuth, /*renovarToken*/ } from "../controller/auth";
-import { /*crearAdmin,*/ actualizarAdmin } from "../controller/admin";
-import { validarJWT } from "../middlewares/validarjwt";
+import { loginAuth, /*renovarToken*/ } from "../../controller/auth";
+import { /*crearAdmin,*/ actualizarAdmin } from "../../controller/admin";
+import { validarJWT } from "../../middlewares/validarjwt";
 
 
 
