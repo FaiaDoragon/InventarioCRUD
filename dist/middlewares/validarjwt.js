@@ -39,7 +39,7 @@ const validarJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         res.status(401).json({
-            msg: 'Token no valido'
+            msg: 'Vuelva a iniciar sesion por favor'
         });
     }
 });

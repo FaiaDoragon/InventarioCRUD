@@ -54,9 +54,12 @@ class Server {
         });
     }
     routes() {
+        //handlebars
         this.app.set('view engine', 'hbs');
         this.hbs.registerPartial('banner', bannerPartialContent);
+        //pages rutas
         this.app.use(this.path.pages, pages_1.default);
+        //auth y productos endpoints rutas
         this.app.use(this.path.auth, auth_1.default);
         this.app.use(this.path.productos, productos_1.default);
     }

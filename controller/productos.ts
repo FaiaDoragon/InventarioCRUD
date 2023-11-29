@@ -7,7 +7,7 @@ export const obtenerProductos = async (req: Request, res: Response) => {
     const productos = await Producto.find()
 
     if (!productos) {
-        return res.status(404).json({msg: "Lista completa de productos"})
+        return res.status(404).json({msg: "No se encontraron los datos solicitados"})
     }
     res.status(200).json({
         // msg: "Lista completa de productos",
@@ -46,8 +46,8 @@ export const crearProducto = async (req: Request, res: Response) => {
         });
     } catch (error: any) {
         return res.status(500).json({
-            error: "Error al crear producto",
-            msg: error.message,
+            msg: "Comuniquese con el Administrador",
+            error: error.message,
         });
     }
 }
@@ -59,7 +59,7 @@ export const obtenerProducto = async (req: Request, res: Response) => {
     const id = parseInt(idString)
 
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         })
     }
@@ -69,7 +69,7 @@ export const obtenerProducto = async (req: Request, res: Response) => {
     });
 
     if (!producto) {
-        return res.status(404).json({ msg: `No se encontro producto con el id: ${id}` })
+        return res.status(404).json({ msg: `No se encontro producto con el id suministrado` })
     }
 
     res.status(200).json({
@@ -86,7 +86,7 @@ export const actualizarProducto = async (req: Request, res: Response) => {
     const id = parseInt(idString)
 
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         })
     }
@@ -106,14 +106,15 @@ export const actualizarProducto = async (req: Request, res: Response) => {
 
         await productoDB.save(producto);
 
-        res.json({
+        res.status(200).json({
             msg: "Producto Actualizado correctamente",
             producto,
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error al actualizar el producto'
+            msg: 'Comuniquese con el Administrador',
+            error: error.message,
         });
     }
 
@@ -162,10 +163,11 @@ export const borrarProducto = async (req: Request, res: Response) => {
             msg: "Estado cambiado a false",
             producto
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error al borrar el producto'
+            msg: 'Comuniquese con el Administrador',
+            error: error.message
         });
     }
 }
@@ -187,10 +189,11 @@ export const eliminarProducto = async (req: Request, res: Response) => {
         
         await productoDB.delete({ID : id})
 
-    } catch (error) {
+    } catch (error : any) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error al eliminar el producto'
+            msg: 'Comuniquese con el Administrador',
+            error: error.message
         });
     }
 

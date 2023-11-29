@@ -35,7 +35,7 @@ export const validarJWT = async (req: Request, res: Response, next: express.Next
         next()
     } catch (error) {
         res.status(401).json({
-            msg: 'Token no valido'
+            msg: 'Vuelva a iniciar sesion por favor'
         })
     }
 }

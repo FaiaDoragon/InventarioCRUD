@@ -51,11 +51,12 @@ class Server {
     }
 
     routes() {
-        
+        //handlebars
         this.app.set('view engine', 'hbs');
         this.hbs.registerPartial('banner', bannerPartialContent);
+        //pages rutas
         this.app.use(this.path.pages, pages)
-        
+        //auth y productos endpoints rutas
         this.app.use(this.path.auth, auth)
         this.app.use(this.path.productos, productos)
     }

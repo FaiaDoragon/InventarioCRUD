@@ -18,7 +18,7 @@ const dbconnection_1 = __importDefault(require("../db/dbconnection"));
 const obtenerProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const productos = yield entities_1.Producto.find();
     if (!productos) {
-        return res.status(404).json({ msg: "Lista completa de productos" });
+        return res.status(404).json({ msg: "No se encontraron los datos solicitados" });
     }
     res.status(200).json({
         // msg: "Lista completa de productos",
@@ -46,8 +46,8 @@ const crearProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (error) {
         return res.status(500).json({
-            error: "Error al crear producto",
-            msg: error.message,
+            msg: "Comuniquese con el Administrador",
+            error: error.message,
         });
     }
 });
@@ -56,7 +56,7 @@ const obtenerProducto = (req, res) => __awaiter(void 0, void 0, void 0, function
     const idString = req.params.id;
     const id = parseInt(idString);
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         });
     }
@@ -64,7 +64,7 @@ const obtenerProducto = (req, res) => __awaiter(void 0, void 0, void 0, function
         ID: id
     });
     if (!producto) {
-        return res.status(404).json({ msg: `No se encontro producto con el id: ${id}` });
+        return res.status(404).json({ msg: `No se encontro producto con el id suministrado` });
     }
     res.status(200).json({
         msg: "producto encontrado",
@@ -77,7 +77,7 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const { body } = req;
     const id = parseInt(idString);
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         });
     }
@@ -91,7 +91,7 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
         }
         productoDB.merge(producto, body);
         yield productoDB.save(producto);
-        res.json({
+        res.status(200).json({
             msg: "Producto Actualizado correctamente",
             producto,
         });
@@ -99,7 +99,8 @@ const actualizarProducto = (req, res) => __awaiter(void 0, void 0, void 0, funct
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error al actualizar el producto'
+            msg: 'Comuniquese con el Administrador',
+            error: error.message,
         });
     }
 });
@@ -138,7 +139,8 @@ const borrarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error al borrar el producto'
+            msg: 'Comuniquese con el Administrador',
+            error: error.message
         });
     }
 });
@@ -158,7 +160,8 @@ const eliminarProducto = (req, res) => __awaiter(void 0, void 0, void 0, functio
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error al eliminar el producto'
+            msg: 'Comuniquese con el Administrador',
+            error: error.message
         });
     }
     res.json({
