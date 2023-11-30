@@ -10,6 +10,6 @@ const router = Router();
 router.post('/login', loginAuth );
 //router.get('/validator', validarJWT, renovarToken );
 //router.post('/register', crearAdmin );
-router.put('/update/:id', actualizarAdmin);
+router.put('/update/:id', validarJWT ,actualizarAdmin);
 
 export default router;

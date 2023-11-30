@@ -62,24 +62,40 @@ exports.default = router;
  *             example:
  *                  msg: hubo un error comuniquese con el administrador
  *
- * /api/admin/update/id:
+ * /api/admin/update/{id}:
  *   put:
  *     tags:
  *       - Auth
  *     security:
  *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: Identificador único
+ *         required: true
+ *     requestBody:
+ *         required: true
+ *         content:
+ *             application/json:
+ *                 example:
+ *                      {
+ *                        "NOMBRE": "NOMBRE",
+ *                        "APELLIDO": "APELLIDO",
+ *                        "USUARIO": "usuario",
+ *                        "PASSWORD": password
+ *                      }
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Admin'
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: OK
+ *             example:
+ *                  msg: Admin Actualizado
+ *                  administrador: {
+ *                                   "NOMBRE": "NOMBRE",
+ *                                   "APELLIDO": "APELLIDO",
+ *                                   "USUARIO": "usuario"
+ *                                 }
  * /api/admin/productos:
  *  get:
  *     summary: Obtener un listado de todos los productos
@@ -169,13 +185,18 @@ exports.default = router;
  *                      example:
  *                          msg: "Error al crear producto"
  *                          error: error.message
- * /api/admin/productos/id:
+ * /api/admin/productos/{id}:
  *  get:
  *     summary: Obtener producto por Id
  *     tags:
  *       - Productos
  *     security:
  *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: Identificador único
+ *         required: true
  *     responses:
  *       200:
  *         description: OK
@@ -206,6 +227,11 @@ exports.default = router;
  *       - Productos
  *      security:
  *       - ApiKeyAuth: []
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: Identificador único
+ *          required: true
  *      requestBody:
  *          required: true
  *          content:
@@ -251,6 +277,11 @@ exports.default = router;
  *       - Productos
  *      security:
  *       - ApiKeyAuth: []
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: Identificador único
+ *          required: true
  *      responses:
  *          200:
  *              description: Ok - Estado cambiado a false/truex`
@@ -293,13 +324,18 @@ exports.default = router;
  *              $ref: '#/components/responses/NoFoudId'
  *          500:
  *              $ref: '#/components/responses/Server'
- * /api/admin/productos/d/id:
+ * /api/admin/productos/d/{id}:
  *  delete:
  *      summary: Eliminacion definitiva de producto
  *      tags:
  *       - Productos
  *      security:
  *       - ApiKeyAuth: []
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          description: Identificador único
+ *          required: true
  *      responses:
  *          200:
  *              description: Ok - Producto eliminado de la base de datos

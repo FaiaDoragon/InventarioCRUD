@@ -59,7 +59,7 @@ const actualizarAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function
     const idString = req.params.id;
     const id = parseInt(idString);
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         });
     }
@@ -68,10 +68,14 @@ const actualizarAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function
             ID: id
         });
         if (!administrador) {
-            return res.status(404).json({ msg: "No se encontro producto con el id suministrado" });
+            return res.status(404).json({
+                msg: "No se encontro Admin con el id suministrado"
+            });
         }
-        const passwordHash = yield (0, bcrypt_1.encrypt)(body.PASSWORD);
-        body.PASSWORD = passwordHash;
+        if (body.password) {
+            const passwordHash = yield (0, bcrypt_1.encrypt)(body.PASSWORD);
+            body.PASSWORD = passwordHash;
+        }
         adminDB.merge(administrador, body);
         yield adminDB.save(administrador);
         res.status(200).json({
