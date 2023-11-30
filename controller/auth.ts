@@ -25,7 +25,7 @@ export const loginAuth = async(req: Request, res: Response) => {
         const checkPassword = await compare(PASSWORD, administrador.PASSWORD)
 
         if (!checkPassword) {
-            return res.status(409).json({
+            return res.status(404).json({
                 msg : `Usuario o Contraseña invalidos`
             })
         }

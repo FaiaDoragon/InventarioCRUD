@@ -31,7 +31,7 @@ const loginAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const checkPassword = yield (0, bcrypt_1.compare)(PASSWORD, administrador.PASSWORD);
         if (!checkPassword) {
-            return res.status(409).json({
+            return res.status(404).json({
                 msg: `Usuario o Contraseña invalidos`
             });
         }

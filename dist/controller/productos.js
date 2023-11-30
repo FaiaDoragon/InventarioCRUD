@@ -109,7 +109,7 @@ const borrarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const idString = req.params.id;
     const id = parseInt(idString);
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         });
     }
@@ -124,14 +124,14 @@ const borrarProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (!producto.ESTADO) {
             productoDB.merge(producto, { ESTADO: true });
             yield productoDB.save(producto);
-            return res.json({
+            return res.status(200).json({
                 msg: "Estado cambiado a true",
                 producto
             });
         }
         productoDB.merge(producto, { ESTADO: false });
         yield productoDB.save(producto);
-        res.json({
+        res.status(200).json({
             msg: "Estado cambiado a false",
             producto
         });
@@ -149,12 +149,20 @@ const eliminarProducto = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const idString = req.params.id;
     const id = parseInt(idString);
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         });
     }
     const productoDB = dbconnection_1.default.getRepository(entities_1.Producto);
     try {
+        const producto = yield productoDB.findOneBy({
+            ID: id
+        });
+        if (!producto) {
+            res.status(404).json({
+                msg: `No se encontro producto con el id: ${id}`
+            });
+        }
         yield productoDB.delete({ ID: id });
     }
     catch (error) {
@@ -164,7 +172,7 @@ const eliminarProducto = (req, res) => __awaiter(void 0, void 0, void 0, functio
             error: error.message
         });
     }
-    res.json({
+    res.status(200).json({
         msg: `producto con el id: ${id} eliminado definitivamente`
     });
 });

@@ -25,6 +25,7 @@ export default router;
  * @openapi
  * /:
  *   get:
+ *     summary: login Page
  *     tags:
  *       - Pages
  *     responses:
@@ -32,6 +33,7 @@ export default router;
  *         description: OK (Pagina de inicio de sesion)
  * /panelcontrol:
  *   get:
+ *     summary: Panel de Control
  *     tags:
  *       - Pages
  *     responses:
@@ -40,20 +42,36 @@ export default router;
  *         content:
  * /api/admin/login:
  *   post:
+ *     summary: Inicio de sesion
  *     tags:
  *       - Auth
+ *     requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  example:
+ *                      USUARIO: admin
+ *                      PASSWORD: admin
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Admin'
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: OK
+ *             example:
+ *                  token: token
+ *       404:
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             example:
+ *                  msg: Usuario o Contraseña invalidos
+ *       500:
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             example:
+ *                  msg: hubo un error comuniquese con el administrador
+ * 
  * /api/admin/update/id:
  *   put:
  *     tags:
@@ -124,8 +142,16 @@ export default router;
  *          required: true
  *          content:
  *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Productos'
+ *                  example:
+ *                      {
+ *                       "NOMBRE": "NOMBRE DEL PRODUCTO",
+ *                       "MARCA": "MARCA DEL PRODUCTO",
+ *                       "IMG": "IMAGEN.img",
+ *                       "PRECIO": "PRECIO DEL PRODUCTO",
+ *                       "STOCK": STOCK DEL PRODUCTO,
+ *                       "TALLA": "TALLA DE SER NECESARIA",
+ *                       "COLOR": "COLOR DEL PRODUCTO",
+ *                       }
  *      responses:
  *          201:
  *              description: Ok - Producto Creado
@@ -230,23 +256,74 @@ export default router;
  *              $ref: '#/components/responses/Server'
  *              
  *  delete:
+ *      summary: Descontinuidad de Producto
  *      tags:
  *       - Productos
  *      security:
  *       - ApiKeyAuth: [] 
+ *      responses:
+ *          200:
+ *              description: Ok - Estado cambiado a false/truex`
+ *              content:
+ *                  application/json:
+ *                      example:
+ *                          false:
+ *                              msg: Estado cambiado a false
+ *                              producto: {
+ *                                  "ID": numeroID,
+ *                                  "ESTADO": false,
+ *                                  "NOMBRE": "NOMBRE DEL PRODUCTO",
+ *                                  "MARCA": "MARCA DEL PRODUCTO",
+ *                                  "IMG": "IMAGEN.img",
+ *                                  "PRECIO": "PRECIO DEL PRODUCTO",
+ *                                  "STOCK": STOCK DEL PRODUCTO,
+ *                                  "TALLA": "TALLA DE SER NECESARIA",
+ *                                  "COLOR": "COLOR DEL PRODUCTO",
+ *                                  "createdAt": "FECHA DE CREACION",
+ *                                  "updatedAt": "FECHA DE MODIFICACION"
+ *                              }
+ *                          true:
+ *                              msg: Estado cambiado a true
+ *                              producto: {
+ *                                  "ID": numeroID,
+ *                                  "ESTADO": true,
+ *                                  "NOMBRE": "NOMBRE DEL PRODUCTO",
+ *                                  "MARCA": "MARCA DEL PRODUCTO",
+ *                                  "IMG": "IMAGEN.img",
+ *                                  "PRECIO": "PRECIO DEL PRODUCTO",
+ *                                  "STOCK": STOCK DEL PRODUCTO,
+ *                                  "TALLA": "TALLA DE SER NECESARIA",
+ *                                  "COLOR": "COLOR DEL PRODUCTO",
+ *                                  "createdAt": "FECHA DE CREACION",
+ *                                  "updatedAt": "FECHA DE MODIFICACION"
+ *                              }
+ *          401:
+ *              $ref: '#/components/responses/UnauthorizedError'
+ *          404:
+ *              $ref: '#/components/responses/NoFoudId'
+ *          500:
+ *              $ref: '#/components/responses/Server'
  * /api/admin/productos/d/id:
  *  delete:
+ *      summary: Eliminacion definitiva de producto
  *      tags:
  *       - Productos
  *      security:
  *       - ApiKeyAuth: []
  *      responses:
  *          200:
- *              description: OK
+ *              description: Ok - Producto eliminado de la base de datos
+ *              content:
+ *                  application/json:
+ *                      example:
+ *                          msg: 'producto con el id: ${id} eliminado definitivamente'
+ *                          
  *          401:
  *              $ref: '#/components/responses/UnauthorizedError'
  *          404:
- *              $ref: '#/components/responses/NoFound'
+ *              $ref: '#/components/responses/NoFoudId'
+ *          500:
+ *              $ref: '#/components/responses/Server'
  */
 
 

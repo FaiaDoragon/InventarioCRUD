@@ -128,7 +128,7 @@ export const borrarProducto = async (req: Request, res: Response) => {
     const id = parseInt(idString)
 
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         })
     }
@@ -149,7 +149,7 @@ export const borrarProducto = async (req: Request, res: Response) => {
             productoDB.merge(producto, { ESTADO: true })
             await productoDB.save(producto);
 
-            return res.json({
+            return res.status(200).json({
                 msg: "Estado cambiado a true",
                 producto
             })
@@ -159,7 +159,7 @@ export const borrarProducto = async (req: Request, res: Response) => {
 
         await productoDB.save(producto);
 
-        res.json({
+        res.status(200).json({
             msg: "Estado cambiado a false",
             producto
         })
@@ -178,7 +178,7 @@ export const eliminarProducto = async (req: Request, res: Response) => {
     const id = parseInt(idString)
 
     if (Number.isNaN(id)) {
-        return res.json({
+        return res.status(404).json({
             msg: `Debe enviar un id Valido`
         })
     }
@@ -186,7 +186,17 @@ export const eliminarProducto = async (req: Request, res: Response) => {
     const productoDB = db.getRepository(Producto)
 
     try {
-        
+
+        const producto = await productoDB.findOneBy({
+            ID: id
+        })
+
+        if (!producto) {
+            res.status(404).json({
+                msg: `No se encontro producto con el id: ${id}`
+            })
+        }
+
         await productoDB.delete({ID : id})
 
     } catch (error : any) {
@@ -197,7 +207,7 @@ export const eliminarProducto = async (req: Request, res: Response) => {
         });
     }
 
-    res.json({
+    res.status(200).json({
         msg: `producto con el id: ${id} eliminado definitivamente`
     })
 }
