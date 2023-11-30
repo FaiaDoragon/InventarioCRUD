@@ -96,6 +96,19 @@ exports.default = router;
  *                                   "APELLIDO": "APELLIDO",
  *                                   "USUARIO": "usuario"
  *                                 }
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       404:
+ *         description: Admin no encontrado
+ *         content:
+ *           application/json:
+ *             example:
+ *                  error1:
+ *                      msg: Debe enviar un id Valido
+ *                  error2:
+ *                      msg: No se encontro Admin con el id suministrado
+ *       500:
+ *         $ref: '#/components/responses/Server'
  * /api/admin/productos:
  *  get:
  *     summary: Obtener un listado de todos los productos
@@ -137,7 +150,7 @@ exports.default = router;
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       404:
- *         $ref: '#/components/responses/NoFound'
+ *         $ref: '#/components/responses/NoFoundId'
  *  post:
  *      summary: Crear un producto
  *      tags:
@@ -220,7 +233,7 @@ exports.default = router;
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       404:
- *         $ref: '#/components/responses/NoFoudId'
+ *         $ref: '#/components/responses/NoFoundId'
  *  put:
  *      summary: Actualizar Producto por Id
  *      tags:
@@ -267,7 +280,7 @@ exports.default = router;
  *                              "updatedAt": "FECHA DE MODIFICACION"
  *                          }
  *          404:
- *              $ref: '#/components/responses/NoFoudId'
+ *              $ref: '#/components/responses/NoFoundId'
  *          500:
  *              $ref: '#/components/responses/Server'
  *
@@ -321,7 +334,7 @@ exports.default = router;
  *          401:
  *              $ref: '#/components/responses/UnauthorizedError'
  *          404:
- *              $ref: '#/components/responses/NoFoudId'
+ *              $ref: '#/components/responses/NoFoundId'
  *          500:
  *              $ref: '#/components/responses/Server'
  * /api/admin/productos/d/{id}:
@@ -347,7 +360,7 @@ exports.default = router;
  *          401:
  *              $ref: '#/components/responses/UnauthorizedError'
  *          404:
- *              $ref: '#/components/responses/NoFoudId'
+ *              $ref: '#/components/responses/NoFoundId'
  *          500:
  *              $ref: '#/components/responses/Server'
  */
@@ -438,7 +451,7 @@ exports.default = router;
  *                  application/json:
  *                      example:
  *                          msg: "No se encontraron los datos solicitados"
- *          NoFoudId:
+ *          NoFoundId:
  *              description: Datos no encontrados
  *              content:
  *                  application/json:

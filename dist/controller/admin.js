@@ -86,7 +86,8 @@ const actualizarAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function
     catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error al actualizar datos del Administrador'
+            msg: 'Error al actualizar datos del Administrador',
+            error: error.message
         });
     }
 });

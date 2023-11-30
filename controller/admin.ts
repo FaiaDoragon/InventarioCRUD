@@ -90,10 +90,11 @@ export const actualizarAdmin = async (req: Request, res: Response) => {
             msg: "Admin Actualizado",
             administrador
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error al actualizar datos del Administrador'
+            msg: 'Error al actualizar datos del Administrador',
+            error: error.message
         });
     }
 }
